@@ -3,13 +3,21 @@ import {
   chatIDs,
 } from './config';
 
+const pad = (n, width, z) => {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
 const camelToTitle = (str) => {
   var result = str.replace(/([A-Z])/g, " $1");
   return result.charAt(0).toUpperCase() + result.slice(1);
 };
 
 const constructText = (obj) =>
-  Object.keys(obj).map(key => `*${camelToTitle(key)}*: ${obj[key]}`).join('\n');
+  Object.keys(obj).map(key => key[0] === 'S' ?
+    `*${key}*: ${obj[key]}` :
+    `*${camelToTitle(key)}*: ${obj[key]}`).join('\n');
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
@@ -79,7 +87,7 @@ async function handleRequest(request) {
       } = requestJSON || {};
 
       output = constructText(episodes.reduce((aggr, elem) => {
-        const key = `S${elem.seasonNumber}E${elem.episodeNumber}`;
+        const key = `S${pad(+elem.seasonNumber, 2)}E${pad(+elem.episodeNumber, 3)}`;
         const quality = elem.quality;
         return {
           ...aggr,
