@@ -101,6 +101,18 @@ async function handleRequest(request) {
   }
 
 
+  await fetch(`https://api.telegram.org/bot${apiKey}/sendMessage`, {
+    method: 'POST',
+    body: JSON.stringify({
+      chat_id: chatIDs[0],
+      text: JSON.stringify(requestJSON, null, 2),
+      parse_mode: 'Markdown',
+    }),
+    headers: {
+      'content-type': 'application/json;charset=UTF-8',
+    },
+  });
+
   await chatIDs.forEach(async chatID => {
     await fetch(`https://api.telegram.org/bot${apiKey}/sendMessage`, {
       method: 'POST',
