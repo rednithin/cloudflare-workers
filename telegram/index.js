@@ -90,7 +90,7 @@ async function handleRequest(request) {
         const key = `S${pad(+elem.seasonNumber, 2)}E${pad(+elem.episodeNumber, 3)}`;
         return {
           ...aggr,
-          [key]: `${elem.title} [${elem.quality}]`,
+          [key]: `${elem.title} [[${elem.quality}]]`,
         }
       }, {
         eventType,
